@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../styles/index.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+        <title>Encriptador</title>
+    </head>
+
+    <body>
+        <div class="mainContainer">
+            <h1 class="titulo">Encriptador de Texto</h1>
+            <div class="subContainer">
+                <div class="formContainer">
+                    <input 
+                        type="text" 
+                        id="textoIngresado" 
+                        class="inputText"
+                        placeholder="Ingrese el texto a encriptar o desencriptar" 
+                    />
+                    <div class="buttonContainer">
+                        <button id="botonEncriptar">
+                            Encriptar
+                        </button>
+                        <button id="botonDesencriptar">
+                            Desencriptar
+                        </button>
+                    </div>
+                </div>
+                <div class="formContainer">
+                    <input 
+                    class="encriptedText" 
+                    id="textoEncriptado"
+                    placeholder="Texto procesado" 
+                    readonly />
+                    <button id="botonCopiar">Copy</button>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+
+            // Defino un diccionario para reemplazar los caracteres de la frase o palabra ingresada 
+
+            const diccionarioEncriptador = {
+                "?": "@",
+                " ": "▒",
+                "a": '$',
+                "b": "←",
+                "c": "|",
+                "d": "○",
+                "e": "°",
+                "f": "=",
+                "g": "{",
+                "h": "~",
+                "i": "⌂",
+                "j": "Ç",
+                "k": "ü",
+                "l": "é",
+                "m": "â",
+                "n": "î",
+                "ñ": "û",
+                "o": "¬",
+                "p": "┤",
+                "q": "¥",
+                "r": "╚",
+                "s": "◘",
+                "t": "☺",
+                "u": "☻",
+                "v": "♥",
+                "w": "♦",
+                "x": "♣",
+                "y": "♠",
+                "z": "•",
+
+            }
+
+            // Guardo en variables:
+            // El input donde de va a ingresar la palabra o frase
+            // El input donde se va a mostrar el texto encriptado o desencriptado
+            // El botón que va a encriptar la palabra o frase ingresada
+            // EL boton para desencriptar la palabra o frase encriptada
+            // El boton para copiar la palabra o frase encriptada
+
+            var textoIngresado = document.getElementById("textoIngresado");
+            var textoEncriptado = document.getElementById("textoEncriptado")
+            var botonEncriptar = document.getElementById("botonEncriptar");
+            var botonDesencriptar = document.getElementById("botonDesencriptar");
+            var botonCopiar = document.getElementById("botonCopiar");
+
+            // aplico el metodo focus() para ubicar el cursor en el input
+            // que va a recibir la palabra o frase
+            textoIngresado.focus();
+
+            // Funcion para encriptar
+            function encriptar() {
+
+                // Guardo en una variable un string vacio
+                let textoProcesado = '';
+
+                // Guardo en una variable el valor ingresado al input pasado a minusculas
+                // para evitar problemas en la comparación de caracteres.
+                let textoEnMinusculas = textoIngresado.value.toLowerCase();
+
+                // Usando un bucle for recorro la palabra ingresada 
+                for (let i = 0; i < textoEnMinusculas.length; i++) {
+
+                    // Si el diccionario tiene un valor para el caracter que esta siendo evaluado
+                    // lo agrego al string que declaré al inicio de la funcion
+                    // Si el caracter no tiene un valor asignado en el diccionario
+                    // simplemente, ese caracter no se encripta.
+                    if (diccionarioEncriptador[textoEnMinusculas[i]]) {
+                        textoProcesado += diccionarioEncriptador[textoEnMinusculas[i]];
+                    } else {
+                        textoProcesado += textoEnMinusculas[i];
+                    }
+                }
+
+                textoEncriptado.value = textoProcesado;
+                textoIngresado.value = '';
+                textoIngresado.focus();
+            }
+
+            function desencriptar() {
+
+                let textoProcesado = '';
+
+                for (let i = 0; i < textoIngresado.value.length; i++) {
+                    
+                    let flag = true;
+
+                    for (let prop in diccionarioEncriptador) {
+                        if (diccionarioEncriptador[prop] === textoIngresado.value[i]) {
+                            console.log(prop)
+                            textoProcesado += prop;
+                            flag = false;
+                            break;
+                        }
+                    }
+
+                    if (flag) {
+                        textoProcesado += textoIngresado.value[i];
+                    }
+
+                }
+
+                textoEncriptado.value = textoProcesado;
+                textoIngresado.value = '';
+                textoIngresado.focus();
+
+            }
+
+            function copyOnClipboard() {
+                document.execCommand("copy");
+                textoEncriptado.value = '';
+                textoIngresado.focus();
+            }
+
+            document.oncopy = (event) => {
+
+                event.preventDefault();
+                event.clipboardData.setData(
+                    'text/plain',
+                    textoEncriptado.value
+                );
+
+            }
+
+            botonEncriptar.onclick = encriptar;
+            botonCopiar.onclick = copyOnClipboard;
+            botonDesencriptar.onclick = desencriptar;
+
+        </script>
+
+    </body>
+
+</html>
