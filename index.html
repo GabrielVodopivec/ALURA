@@ -47,41 +47,6 @@
         
         <script>
 
-            // Defino un diccionario para reemplazar los caracteres de la frase o palabra ingresada 
-
-            const diccionarioEncriptador = {
-                "?": "@",
-                " ": "▒",
-                "a": '$',
-                "b": "←",
-                "c": "|",
-                "d": "○",
-                "e": "°",
-                "f": "=",
-                "g": "{",
-                "h": "~",
-                "i": "⌂",
-                "j": "Ç",
-                "k": "ü",
-                "l": "é",
-                "m": "â",
-                "n": "î",
-                "ñ": "û",
-                "o": "¬",
-                "p": "┤",
-                "q": "¥",
-                "r": "╚",
-                "s": "◘",
-                "t": "☺",
-                "u": "☻",
-                "v": "♥",
-                "w": "♦",
-                "x": "♣",
-                "y": "♠",
-                "z": "•",
-
-            }
-
             // Guardo en variables:
             // El input donde de va a ingresar la palabra o frase
             // El input donde se va a mostrar el texto encriptado o desencriptado
@@ -105,22 +70,12 @@
                 // Guardo en una variable un string vacio
                 let textoProcesado = '';
 
-                // Guardo en una variable el valor ingresado al input pasado a minusculas
-                // para evitar problemas en la comparación de caracteres.
-                let textoEnMinusculas = textoIngresado.value.toLowerCase();
-
                 // Usando un bucle for recorro la palabra ingresada 
-                for (let i = 0; i < textoEnMinusculas.length; i++) {
+                for (let i = 0; i < textoIngresado.value.length; i++) {
+                    textoProcesado += String.fromCharCode(
+                        textoIngresado.value.charCodeAt(i) + 215
+                    )
 
-                    // Si el diccionario tiene un valor para el caracter que esta siendo evaluado
-                    // lo agrego al string que declaré al inicio de la funcion
-                    // Si el caracter no tiene un valor asignado en el diccionario
-                    // simplemente, ese caracter no se encripta.
-                    if (diccionarioEncriptador[textoEnMinusculas[i]]) {
-                        textoProcesado += diccionarioEncriptador[textoEnMinusculas[i]];
-                    } else {
-                        textoProcesado += textoEnMinusculas[i];
-                    }
                 }
 
                 textoEncriptado.value = textoProcesado;
@@ -133,22 +88,9 @@
                 let textoProcesado = '';
 
                 for (let i = 0; i < textoIngresado.value.length; i++) {
-                    
-                    let flag = true;
-
-                    for (let prop in diccionarioEncriptador) {
-                        if (diccionarioEncriptador[prop] === textoIngresado.value[i]) {
-                            console.log(prop)
-                            textoProcesado += prop;
-                            flag = false;
-                            break;
-                        }
-                    }
-
-                    if (flag) {
-                        textoProcesado += textoIngresado.value[i];
-                    }
-
+                    textoProcesado += String.fromCharCode(
+                        textoIngresado.value.charCodeAt(i) - 215
+                    )
                 }
 
                 textoEncriptado.value = textoProcesado;
